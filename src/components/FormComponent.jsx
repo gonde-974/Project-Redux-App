@@ -2,10 +2,19 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { FileParser } from '../assets/utils/fileParser';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { logedUserAction } from '../store/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 function FormComponent() {
     // State за преглед на слика
     const [imagePreview, setImagePreview] = useState(null);
+
+    //Dispetch sa prosleduvanje ili povikuvanje na nekoja Akcija 
+    const dispetch = useDispatch();
+
+    //useNavigation za vrajkanje na Home pri klik na submit
+    const navigate = useNavigate();
 
     // Функција за обработка на слика
     const handleImageChange = (event) => {
@@ -50,11 +59,18 @@ function FormComponent() {
             console.log(values);
             FileParser(values.image)
                 .then((res) => {
-                    console.log({ ...values, image: res });
+
+                    //Isprati objekt slika : kako string preku dispetch
+                    dispetch(logedUserAction({ ...values, image: res }))
+                    
+                    //console.log({ ...values, image: res });
+
                     // Испраќање кон backend (пример)
                     // userLogin.addUser({...values , image:res})
                     //     .then(res => navigate('/'))
                     //     .catch(err => console.log(err));
+
+                    navigate('/')
                 })
                 .catch((err) => console.log(err));
 
