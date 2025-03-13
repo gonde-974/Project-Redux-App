@@ -21,9 +21,7 @@ function App() {
     <>
       <div className="h-screen bg-neutral-800 flex flex-col">
         <NavBarComponent />
-        <div className="flex-grow flex items-center justify-center">
-          <SiRedux className="text-purple-500 w-[500px] h-[500px]" />
-        </div>
+       
         <Outlet />
       </div>
     </>

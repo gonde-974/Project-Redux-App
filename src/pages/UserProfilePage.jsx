@@ -1,26 +1,46 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../store/userSlice';
-import { useNavigation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function UserProfilePage() {
   const { user } = useSelector((state) => state.userStore);
-  const dispatch =useDispatch();
-  const navigate = useNavigation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  function handleLogout(){
-    dispatch(logoutAction())
-    navigate('/registerpage')
+  function handleLogout() {
+    // Прикажи Toast известување
+    toast.warning('Податоците ќе бидат избришани!', {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+
+    setTimeout(() => {
+      // Пренасочување на register page
+      navigate('/registerpage');
+      
+      // Бришење на податоците
+      dispatch(logoutAction());
+    }, 3000);
   }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
       <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-3xl flex flex-col md:flex-row items-center">
         
+        {/* ToastContainer за да ги прикажува Toast пораките */}
+        <ToastContainer />
+
         {/* User Image */}
         <img 
           src={user.image} 
-          alt="User" 
+          alt="" 
           className="w-48 h-48 rounded-full object-cover border-4 border-purple-500 shadow-md"
         />
 
@@ -53,7 +73,10 @@ function UserProfilePage() {
 
           {/* Log Out Button */}
           <div className="flex justify-center mt-6">
-            <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300">
+            <button 
+              onClick={handleLogout} 
+              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300"
+            >
               Log Out
             </button>
           </div>
